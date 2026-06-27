@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: production-web-app
+  labels:
+    app: web-app
+spec:
+  replicas: 3   # इंटरव्यूसाठी महत्त्वाचे: हाय-अवेलेबिलिटीसाठी ३ रेप्लिकास
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - name: node-app
+        image: nginx:alpine   # प्रॅक्टिससाठी आपण लाइटवेट निनिक्स वापरत आहोत
+        ports:
+        - containerPort: 80
+        resources:   # इंटरव्यू स्पेशल: रिसोर्स लिमिट्स सेट करणे बेस्ट प्रॅक्टिस आहे
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
