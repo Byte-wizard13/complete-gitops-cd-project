@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: production-gitops-app
+  namespace: argocd   # ArgoCD च्या मूळ घरामध्ये डिप्लॉय होणार
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com' # तुमची नवीन गिटहब लिंक
+    targetRevision: HEAD
+    path: '.'   # कारण आपल्या सर्व फाईल्स मुख्य फोल्डरमध्ये आहेत
+  destination:
+    server: 'https://default.svc'   # क्युबरनेटीसचा अंतर्गत पत्ता
+    namespace: default   # आपले ॲप 'default' नेमस्पेसमध्ये डिप्लॉय होणार
+  syncPolicy:
+    automated:   # 🎯 इंटरव्यू स्पेशल: पूर्ण ऑटोमेशन सुरू करणे
+      prune: true       # गिटहबवरून फाईल डिलीट केली तर क्लस्टरवरूनही आपोआप डिलीट होणार
+      selfHeal: true    # क्लस्टरवर कोणी मॅन्युअली छेडछाड केली तर ती आपोआप दुरुस्त होणार
